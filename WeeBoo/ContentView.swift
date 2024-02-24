@@ -8,19 +8,50 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var viewModel = AnimeViewModel()
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            AsyncImage(url: URL(string: viewModel.imageURL)) { image in
+                image
+                    .resizable()
+                    .cornerRadius(10)
+                    .shadow(radius: 10)
+            } placeholder: {
+                ProgressView()
+            }
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 300, height: 300)
+            
+            Spacer()
+            
+            HStack {
+                Button("Xem ảnh khác") {
+                    viewModel.fetchImageAnime()
+                }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                
+                Button("Lưu ảnh này") {
+                    guard !viewModel.imageURL.isEmpty else { return } 
+                    viewModel.downloadAndSaveImage()
+                }
+                .padding()
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+            }
         }
-        .padding()
+        .onAppear {
+            viewModel.fetchImageAnime()
+        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
