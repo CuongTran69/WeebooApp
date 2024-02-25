@@ -9,6 +9,7 @@ target 'WeeBoo' do
   pod 'RxSwift', '~> 6.0'
   pod 'RxCocoa', '~> 6.0'
   pod 'PromiseKit', '~> 6.15'
+  pod 'Then'
   # Pods for WeeBoo
 
 end

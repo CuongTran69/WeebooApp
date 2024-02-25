@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3165975A2B8B053000F17D03 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316597592B8B053000F17D03 /* CustomError.swift */; };
 		31D13C1D2B8895AF00A0ED94 /* WeeBooApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C1C2B8895AF00A0ED94 /* WeeBooApp.swift */; };
 		31D13C1F2B8895AF00A0ED94 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C1E2B8895AF00A0ED94 /* ContentView.swift */; };
 		31D13C212B8895B000A0ED94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31D13C202B8895B000A0ED94 /* Assets.xcassets */; };
@@ -14,12 +15,14 @@
 		31D13C2B2B8897B200A0ED94 /* WeebooService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C2A2B8897B200A0ED94 /* WeebooService.swift */; };
 		31D13C2E2B8A419300A0ED94 /* AnimeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C2D2B8A419300A0ED94 /* AnimeViewModel.swift */; };
 		31D13C332B8A41F900A0ED94 /* AnimeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C322B8A41F900A0ED94 /* AnimeModel.swift */; };
+		31D13C362B8AE8CC00A0ED94 /* BaseMVVMViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C352B8AE8CC00A0ED94 /* BaseMVVMViewModel.swift */; };
 		CB1667C98556987D15F914E3 /* Pods_WeeBoo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F6A33805F9236B27889CCF /* Pods_WeeBoo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		22F6A33805F9236B27889CCF /* Pods_WeeBoo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeeBoo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FEF7078CDB9C9A662E5B387 /* Pods-WeeBoo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeeBoo.release.xcconfig"; path = "Target Support Files/Pods-WeeBoo/Pods-WeeBoo.release.xcconfig"; sourceTree = "<group>"; };
+		316597592B8B053000F17D03 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		31D13C192B8895AF00A0ED94 /* WeeBoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeeBoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31D13C1C2B8895AF00A0ED94 /* WeeBooApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeBooApp.swift; sourceTree = "<group>"; };
 		31D13C1E2B8895AF00A0ED94 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -29,6 +32,7 @@
 		31D13C2C2B8A3E2D00A0ED94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		31D13C2D2B8A419300A0ED94 /* AnimeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeViewModel.swift; sourceTree = "<group>"; };
 		31D13C322B8A41F900A0ED94 /* AnimeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeModel.swift; sourceTree = "<group>"; };
+		31D13C352B8AE8CC00A0ED94 /* BaseMVVMViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMVVMViewModel.swift; sourceTree = "<group>"; };
 		A542D8C2ED8A6F9752121487 /* Pods-WeeBoo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeeBoo.debug.xcconfig"; path = "Target Support Files/Pods-WeeBoo/Pods-WeeBoo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -44,6 +48,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		316597582B8B051A00F17D03 /* CustomError */ = {
+			isa = PBXGroup;
+			children = (
+				316597592B8B053000F17D03 /* CustomError.swift */,
+			);
+			path = CustomError;
+			sourceTree = "<group>";
+		};
 		31D13C102B8895AF00A0ED94 = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +77,8 @@
 		31D13C1B2B8895AF00A0ED94 /* WeeBoo */ = {
 			isa = PBXGroup;
 			children = (
+				316597582B8B051A00F17D03 /* CustomError */,
+				31D13C342B8AE8BC00A0ED94 /* BaseViewModel */,
 				31D13C312B8A41EB00A0ED94 /* Model */,
 				31D13C302B8A41E100A0ED94 /* Service */,
 				31D13C2F2B8A419A00A0ED94 /* ViewModel */,
@@ -107,6 +121,14 @@
 				31D13C322B8A41F900A0ED94 /* AnimeModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		31D13C342B8AE8BC00A0ED94 /* BaseViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				31D13C352B8AE8CC00A0ED94 /* BaseMVVMViewModel.swift */,
+			);
+			path = BaseViewModel;
 			sourceTree = "<group>";
 		};
 		52BC74D3C9E60C177825E8D5 /* Frameworks */ = {
@@ -240,11 +262,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3165975A2B8B053000F17D03 /* CustomError.swift in Sources */,
 				31D13C2B2B8897B200A0ED94 /* WeebooService.swift in Sources */,
 				31D13C2E2B8A419300A0ED94 /* AnimeViewModel.swift in Sources */,
 				31D13C332B8A41F900A0ED94 /* AnimeModel.swift in Sources */,
 				31D13C1F2B8895AF00A0ED94 /* ContentView.swift in Sources */,
 				31D13C1D2B8895AF00A0ED94 /* WeeBooApp.swift in Sources */,
+				31D13C362B8AE8CC00A0ED94 /* BaseMVVMViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

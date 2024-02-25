@@ -3,9 +3,9 @@ import Alamofire
 import PromiseKit
 
 class AnimeService {
-    func fetchImageAnime() -> Promise<[AnimeImage]> {
+    func fetchImageAnime(tag: String) -> Promise<[AnimeImage]> {
         return Promise { seal in
-            let url = "https://nekos.best/api/v2/waifu"
+            let url = "https://nekos.best/api/v2/\(tag)"
             AF.request(url).responseDecodable(of: AnimeResponse.self) { response in
                 switch response.result {
                 case .success(let response):
