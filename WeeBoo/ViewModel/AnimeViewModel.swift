@@ -14,9 +14,12 @@ import RxCocoa
 import Then
 
 class AnimeViewModel: ObservableObject, BaseMVVMViewModel {
-    private let animeService        = AnimeService()
-    let disposeBag                  = DisposeBag()
-    @Published var imageURL         = String()
+    private let animeService            = AnimeService()
+    let disposeBag                      = DisposeBag()
+    @Published var isShowAppSettings    = false
+    @Published var isGifUrl             = false
+    var currentTagAnimeImage            = TagAnimeImage.neko.rawValue
+    var currentTagAnimeGif              = TagAnimeGif.bite.rawValue
     
     var state       = BehaviorRelay<State>(value: .init())
     var action      = PublishRelay<Action>()
@@ -31,10 +34,10 @@ class AnimeViewModel: ObservableObject, BaseMVVMViewModel {
 extension AnimeViewModel {
     func mutate(action: Action, with state: State) {
         switch action {
-        case let .fetchAnimeImage(tag):
+        case .fetchAnimeImage:
             mutation.accept(.showLoading(isLoading: true))
             firstly { 
-                animeService.fetchImageAnime(tag: tag)
+                animeService.fetchImageAnime(tag: currentTagAnimeGif)
             }
             .ensure { [weak self] in
                 self?.mutation.accept(.showLoading(isLoading: false))
@@ -57,27 +60,62 @@ extension AnimeViewModel {
                 guard let self = self,
                       let data = response.value,
                       let image = UIImage(data: data) else { return }
-                self.action.accept(.saveToLibrary(image: image))
+                if self.isGifUrl {
+                    self.action.accept(.saveGifToLibrary(gif: data))
+                } else {
+                    self.action.accept(.saveImageToLibrary(image: image))
+                }
             }
             
-        case let .saveToLibrary(image):
+        case let .saveImageToLibrary(image):
             mutation.accept(.showLoading(isLoading: true))
-            PHPhotoLibrary.requestAuthorization { status in
-                guard status == .authorized else {
-                    self.mutation.accept(.showLoading(isLoading: false))
-                    return
-                }
-                
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAsset(from: image)
-                }) { [weak self] success, error in
-                    guard let self = self else { return }
-                    self.mutation.accept(.showLoading(isLoading: false))
-                    if let _ = error {
-                        self.navigator.accept(.showAlert(isSuccess: false, message: CustomError.saveImageError.rawValue))
-                    } else if success {
-                        self.navigator.accept(.showAlert(isSuccess: true, message: CustomError.saveImageSuccess.rawValue))
+            PHPhotoLibrary.requestAuthorization { [weak self] status in
+                guard let self = self else { return }
+                self.mutation.accept(.showLoading(isLoading: false))
+                switch status {
+                case .authorized:
+                    self.saveImage(image: image)
+                case .notDetermined:
+                    PHPhotoLibrary.requestAuthorization { newStatus in
+                        if newStatus == .authorized {
+                            self.saveImage(image: image)
+                        }
                     }
+                case .restricted, .denied:
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.isShowAppSettings = true
+                    }
+                case .limited:
+                   break
+                @unknown default:
+                    break
+                }
+            }
+            
+        case let .saveGifToLibrary(gif):
+            mutation.accept(.showLoading(isLoading: true))
+            PHPhotoLibrary.requestAuthorization { [weak self] status in
+                guard let self = self else { return }
+                self.mutation.accept(.showLoading(isLoading: false))
+                switch status {
+                case .authorized:
+                    self.saveGif(data: gif)
+                case .notDetermined:
+                    PHPhotoLibrary.requestAuthorization { newStatus in
+                        if newStatus == .authorized {
+                            self.saveGif(data: gif)
+                        }
+                    }
+                case .restricted, .denied:
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.isShowAppSettings = true
+                    }
+                case .limited:
+                   break
+                @unknown default:
+                    break
                 }
             }
         }
@@ -88,7 +126,7 @@ extension AnimeViewModel {
         case let .setImageUrlString(string):
             return previousState.with {
                 $0.urlString = string
-                self.imageURL = string
+                self.isGifUrl = string.contains(".gif")
             }
             
         case let .showLoading(isLoading):
@@ -97,16 +135,61 @@ extension AnimeViewModel {
             }
         }
     }
+}
+
+//MARK: - Other
+extension AnimeViewModel {
+    func openAppSettings() {
+        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+        
+        if UIApplication.shared.canOpenURL(settingsUrl) {
+            UIApplication.shared.open(settingsUrl)
+        }
+    }
     
+    func saveGif(data: Data) {
+        PHPhotoLibrary.shared().performChanges({
+            let creationRequest = PHAssetCreationRequest.forAsset()
+            creationRequest.addResource(with: .photo, data: data, options: nil)
+        }) { [weak self] success, error in
+            guard let self = self else { return }
+            self.mutation.accept(.showLoading(isLoading: false))
+            if let _ = error {
+                self.navigator.accept(.showAlert(isSuccess: false, message: CustomError.saveImageError.rawValue))
+            } else if success {
+                self.navigator.accept(.showAlert(isSuccess: true, message: CustomError.saveImageSuccess.rawValue))
+            }
+        }
+    }
+    
+    func saveImage(image: UIImage) {
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.creationRequestForAsset(from: image)
+        }) { [weak self] success, error in
+            guard let self = self else { return }
+            self.mutation.accept(.showLoading(isLoading: false))
+            if let _ = error {
+                self.navigator.accept(.showAlert(isSuccess: false, message: CustomError.saveImageError.rawValue))
+            } else if success {
+                self.navigator.accept(.showAlert(isSuccess: true, message: CustomError.saveImageSuccess.rawValue))
+            }
+        }
+    }
+}
+
+extension AnimeViewModel {
     struct State: Then {
         var isLoading = false
         var urlString = ""
     }
     
     enum Action {
-        case fetchAnimeImage(tag: String)
+        case fetchAnimeImage
         case downloadAndSaveImage
-        case saveToLibrary(image: UIImage)
+        case saveImageToLibrary(image: UIImage)
+        case saveGifToLibrary(gif: Data)
     }
     
     enum Mutation {
@@ -116,5 +199,13 @@ extension AnimeViewModel {
     
     enum Navigation {
         case showAlert(isSuccess: Bool, message: String)
+    }
+    
+    enum TagAnimeGif: String, CaseIterable {
+        case baka, bite, blush, bored, cry, cuddle, dance, facepalm, feed, handhold, handshake, happy, highfive, hug, kick,kiss, laugh, lurk, nod, nom, nope, pat, peck, poke, pout, punch, shoot, shrug, slap, sleep, smile, smug, stare, think, thumbsup, tickle, wave, wink, yawn, yeet
+    }
+    
+    enum TagAnimeImage: String, CaseIterable {
+        case husbando, kitsune, neko, waifu
     }
 }

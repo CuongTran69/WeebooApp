@@ -8,10 +8,12 @@
 import Foundation
 
 struct AnimeImage: Codable {
-    let url: String
+    let url         : String
+    let animeName   : String
     
     enum CodingKeys: String, CodingKey {
         case url
+        case animeName = "anime_name"
     }
 }
 

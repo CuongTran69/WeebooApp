@@ -8,6 +8,6 @@
 import Foundation
 
 enum CustomError: String {
-    case saveImageSuccess   = "Image successfully saved to photo library."
-    case saveImageError     = "Error saving image to photo library."
+    case saveImageSuccess   = "Image/Gif successfully saved to photo library."
+    case saveImageError     = "Error saving image/gif to photo library."
 }
