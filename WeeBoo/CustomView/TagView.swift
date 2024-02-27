@@ -19,7 +19,6 @@ struct TagView: View {
         FlowLayout(mode: .scrollable, items: datas) { data in
             Text(data.rawValue)
                 .padding(5)
-                .bold()
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(5)
                 .onTapGesture {

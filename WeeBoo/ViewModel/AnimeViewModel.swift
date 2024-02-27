@@ -116,6 +116,9 @@ extension AnimeViewModel {
                     break
                 }
             }
+            
+        case let .activeTag(isTagGif):
+            mutation.accept(.setActiveTag(isTagGif: isTagGif))
         }
     }
     
@@ -132,7 +135,50 @@ extension AnimeViewModel {
             return previousState.with {
                 $0.isLoading = isLoading
             }
+            
+        case let .setActiveTag(isTagGif):
+            return previousState.with {
+                $0.isGifActive = isTagGif
+            }
         }
+    }
+}
+
+extension AnimeViewModel {
+    struct State: Then {
+        var isLoading               = false
+        var isGifActive             = false
+        var listTagActive           = [String]()
+        var listTagAnimeImage       = TagAnimeImage.allCases
+        var listTagAnimeGif         = TagAnimeGif.allCases
+        var currentTag              = TagAnimeImage.neko.rawValue
+        var animeModel              : AnimeModel?
+    }
+    
+    enum Action {
+        case activeTag(isTagGif: Bool)
+        case fetchAnimeImage(tag: String)
+        case downloadAndSaveImage
+        case saveImageToLibrary(image: UIImage)
+        case saveGifToLibrary(gif: Data)
+    }
+    
+    enum Mutation {
+        case setActiveTag(isTagGif: Bool)
+        case setAnimeInfo(animeModel: AnimeModel, tagName: String)
+        case showLoading(isLoading: Bool)
+    }
+    
+    enum Navigation {
+        case showAlert(isSuccess: Bool, message: String)
+    }
+    
+    enum TagAnimeGif: String, CaseIterable {
+        case baka, bite, blush, bored, cry, cuddle, dance, facepalm, feed, handhold, handshake, happy, highfive, hug, kick,kiss, laugh, lurk, nod, nom, nope, pat, peck, poke, pout, punch, shoot, shrug, slap, sleep, smile, smug, stare, think, thumbsup, tickle, wave, wink, yawn, yeet
+    }
+    
+    enum TagAnimeImage: String, CaseIterable {
+        case husbando, kitsune, neko, waifu
     }
 }
 
@@ -175,39 +221,5 @@ extension AnimeViewModel {
                 self.navigator.accept(.showAlert(isSuccess: true, message: CustomError.saveImageSuccess.rawValue))
             }
         }
-    }
-}
-
-extension AnimeViewModel {
-    struct State: Then {
-        var listTagAnimeImage       = TagAnimeImage.allCases
-        var listTagAnimeGif         = TagAnimeGif.allCases
-        var currentTag              = TagAnimeImage.neko.rawValue
-        var isLoading               = false
-        var animeModel              : AnimeModel?
-    }
-    
-    enum Action {
-        case fetchAnimeImage(tag: String)
-        case downloadAndSaveImage
-        case saveImageToLibrary(image: UIImage)
-        case saveGifToLibrary(gif: Data)
-    }
-    
-    enum Mutation {
-        case setAnimeInfo(animeModel: AnimeModel, tagName: String)
-        case showLoading(isLoading: Bool)
-    }
-    
-    enum Navigation {
-        case showAlert(isSuccess: Bool, message: String)
-    }
-    
-    enum TagAnimeGif: String, CaseIterable {
-        case baka, bite, blush, bored, cry, cuddle, dance, facepalm, feed, handhold, handshake, happy, highfive, hug, kick,kiss, laugh, lurk, nod, nom, nope, pat, peck, poke, pout, punch, shoot, shrug, slap, sleep, smile, smug, stare, think, thumbsup, tickle, wave, wink, yawn, yeet
-    }
-    
-    enum TagAnimeImage: String, CaseIterable {
-        case husbando, kitsune, neko, waifu
     }
 }
