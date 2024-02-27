@@ -28,7 +28,7 @@ struct ContentView: View {
             Color.white.ignoresSafeArea()
             
             VStack {
-                if viewModel.isGifUrl,
+                if viewModel.isGif,
                    let gifUrl = URL(string: viewModel.state.value.urlString) {
                        GIFView(gifURL: gifUrl)
                         .padding(.horizontal)
@@ -36,6 +36,13 @@ struct ContentView: View {
                         .frame(minWidth: 200, maxWidth: 400)
                         .cornerRadius(10)
                         .shadow(radius: 10)
+                    
+                    HStack {
+                        Text("Movie Name:")
+                        Text("\(viewModel.state.value.movieName)")
+                            .bold()
+                    }
+                    .padding()
                 } else {
                     AsyncImage(url: URL(string: viewModel.state.value.urlString)) { phase in
                         switch phase {
@@ -58,7 +65,7 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                BottomView(viewModel: viewModel, itemsToShare: [viewModel.state.value.urlString])
+                ButtonView(viewModel: viewModel, itemsToShare: [viewModel.state.value.urlString])
             }
             
             if showAlert, !timerManager.timerFinished {
@@ -121,7 +128,7 @@ struct ContentView: View {
 }
 
 //MARK: - Bottom Button View
-struct BottomView: View {
+struct ButtonView: View {
     var viewModel: AnimeViewModel
     // State share
     @State private var shareSheetPresent    = false

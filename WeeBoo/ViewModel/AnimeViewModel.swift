@@ -17,7 +17,7 @@ class AnimeViewModel: ObservableObject, BaseMVVMViewModel {
     private let animeService            = AnimeService()
     let disposeBag                      = DisposeBag()
     @Published var isShowAppSettings    = false
-    @Published var isGifUrl             = false
+    @Published var isGif                = false
     var currentTagAnimeImage            = TagAnimeImage.neko.rawValue
     var currentTagAnimeGif              = TagAnimeGif.bite.rawValue
     
@@ -42,11 +42,12 @@ extension AnimeViewModel {
             .ensure { [weak self] in
                 self?.mutation.accept(.showLoading(isLoading: false))
             }
-            .done { [weak self] images in
+            .done { [weak self] animes in
                 guard let self = self,
-                      let image = images.first,
-                      !image.url.isEmpty else { return }
-                self.mutation.accept(.setImageUrlString(string: image.url))
+                      let anime = animes.first,
+                      !anime.url.isEmpty else { return }
+                self.mutation.accept(.setMovieNameGif(string: anime.animeName))
+                self.mutation.accept(.setImageUrlString(string: anime.url, isGif: anime.isGif()))
             }
             .catch { [weak self] error in
                 self?.navigator.accept(.showAlert(isSuccess: false, message: error.localizedDescription))
@@ -60,7 +61,7 @@ extension AnimeViewModel {
                 guard let self = self,
                       let data = response.value,
                       let image = UIImage(data: data) else { return }
-                if self.isGifUrl {
+                if self.isGif {
                     self.action.accept(.saveGifToLibrary(gif: data))
                 } else {
                     self.action.accept(.saveImageToLibrary(image: image))
@@ -123,10 +124,15 @@ extension AnimeViewModel {
     
     func reduce(previousState: State, mutation: Mutation) -> State? {
         switch mutation {
-        case let .setImageUrlString(string):
+        case let .setImageUrlString(string, isGif):
             return previousState.with {
-                $0.urlString = string
-                self.isGifUrl = string.contains(".gif")
+                $0.urlString    = string
+                self.isGif      = isGif
+            }
+            
+        case let .setMovieNameGif(string):
+            return previousState.with {
+                $0.movieName = string
             }
             
         case let .showLoading(isLoading):
@@ -181,8 +187,9 @@ extension AnimeViewModel {
 
 extension AnimeViewModel {
     struct State: Then {
-        var isLoading = false
-        var urlString = ""
+        var isLoading   = false
+        var urlString   = ""
+        var movieName   = ""
     }
     
     enum Action {
@@ -193,7 +200,8 @@ extension AnimeViewModel {
     }
     
     enum Mutation {
-        case setImageUrlString(string: String)
+        case setImageUrlString(string: String, isGif: Bool)
+        case setMovieNameGif(string: String)
         case showLoading(isLoading: Bool)
     }
     

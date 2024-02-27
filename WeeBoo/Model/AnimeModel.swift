@@ -15,6 +15,10 @@ struct AnimeImage: Codable {
         case url
         case animeName = "anime_name"
     }
+    
+    func isGif() -> Bool {
+        url.contains(".gif")
+    }
 }
 
 struct AnimeResponse: Codable {
