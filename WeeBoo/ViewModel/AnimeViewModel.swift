@@ -18,8 +18,6 @@ class AnimeViewModel: ObservableObject, BaseMVVMViewModel {
     let disposeBag                      = DisposeBag()
     @Published var isShowAppSettings    = false
     @Published var isGif                = false
-    var currentTagAnimeImage            = TagAnimeImage.neko.rawValue
-    var currentTagAnimeGif              = TagAnimeGif.bite.rawValue
     
     var state       = BehaviorRelay<State>(value: .init())
     var action      = PublishRelay<Action>()
@@ -34,10 +32,10 @@ class AnimeViewModel: ObservableObject, BaseMVVMViewModel {
 extension AnimeViewModel {
     func mutate(action: Action, with state: State) {
         switch action {
-        case .fetchAnimeImage:
+        case let .fetchAnimeImage(tag):
             mutation.accept(.showLoading(isLoading: true))
             firstly { 
-                animeService.fetchImageAnime(tag: currentTagAnimeGif)
+                animeService.fetchImageAnime(tag: tag)
             }
             .ensure { [weak self] in
                 self?.mutation.accept(.showLoading(isLoading: false))
@@ -46,16 +44,15 @@ extension AnimeViewModel {
                 guard let self = self,
                       let anime = animes.first,
                       !anime.url.isEmpty else { return }
-                self.mutation.accept(.setMovieNameGif(string: anime.animeName))
-                self.mutation.accept(.setImageUrlString(string: anime.url, isGif: anime.isGif()))
+                self.mutation.accept(.setAnimeInfo(animeModel: anime, tagName: tag))
             }
             .catch { [weak self] error in
                 self?.navigator.accept(.showAlert(isSuccess: false, message: error.localizedDescription))
             }
             
         case .downloadAndSaveImage:
-            guard !state.urlString.isEmpty,
-                  let url = URL(string: state.urlString) else { return }
+            guard let animeModel = state.animeModel, !animeModel.url.isEmpty,
+                  let url = URL(string: animeModel.url) else { return }
             
             AF.download(url).responseData { [weak self] response in
                 guard let self = self,
@@ -124,15 +121,11 @@ extension AnimeViewModel {
     
     func reduce(previousState: State, mutation: Mutation) -> State? {
         switch mutation {
-        case let .setImageUrlString(string, isGif):
+        case let .setAnimeInfo(animeModel, tagName):
             return previousState.with {
-                $0.urlString    = string
-                self.isGif      = isGif
-            }
-            
-        case let .setMovieNameGif(string):
-            return previousState.with {
-                $0.movieName = string
+                $0.animeModel   = animeModel
+                $0.currentTag   = tagName
+                self.isGif      = animeModel.isGif()
             }
             
         case let .showLoading(isLoading):
@@ -187,21 +180,22 @@ extension AnimeViewModel {
 
 extension AnimeViewModel {
     struct State: Then {
-        var isLoading   = false
-        var urlString   = ""
-        var movieName   = ""
+        var listTagAnimeImage       = TagAnimeImage.allCases
+        var listTagAnimeGif         = TagAnimeGif.allCases
+        var currentTag              = TagAnimeImage.neko.rawValue
+        var isLoading               = false
+        var animeModel              : AnimeModel?
     }
     
     enum Action {
-        case fetchAnimeImage
+        case fetchAnimeImage(tag: String)
         case downloadAndSaveImage
         case saveImageToLibrary(image: UIImage)
         case saveGifToLibrary(gif: Data)
     }
     
     enum Mutation {
-        case setImageUrlString(string: String, isGif: Bool)
-        case setMovieNameGif(string: String)
+        case setAnimeInfo(animeModel: AnimeModel, tagName: String)
         case showLoading(isLoading: Bool)
     }
     

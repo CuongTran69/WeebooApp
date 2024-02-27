@@ -7,13 +7,15 @@
 
 import Foundation
 
-struct AnimeImage: Codable {
+struct AnimeModel: Codable {
     let url         : String
-    let animeName   : String
+    let animeName   : String?
+    let artistName  : String?
     
     enum CodingKeys: String, CodingKey {
         case url
-        case animeName = "anime_name"
+        case animeName      = "anime_name"
+        case artistName     = "artist_name"
     }
     
     func isGif() -> Bool {
@@ -22,5 +24,5 @@ struct AnimeImage: Codable {
 }
 
 struct AnimeResponse: Codable {
-    let results: [AnimeImage]
+    let results: [AnimeModel]
 }

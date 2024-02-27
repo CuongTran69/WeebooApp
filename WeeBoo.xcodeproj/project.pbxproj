@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3165975A2B8B053000F17D03 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316597592B8B053000F17D03 /* CustomError.swift */; };
 		3165975D2B8C739000F17D03 /* GifView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3165975C2B8C739000F17D03 /* GifView.swift */; };
+		3165975F2B8D9EDD00F17D03 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3165975E2B8D9EDD00F17D03 /* TagView.swift */; };
 		31D13C1D2B8895AF00A0ED94 /* WeeBooApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C1C2B8895AF00A0ED94 /* WeeBooApp.swift */; };
 		31D13C1F2B8895AF00A0ED94 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C1E2B8895AF00A0ED94 /* ContentView.swift */; };
 		31D13C212B8895B000A0ED94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31D13C202B8895B000A0ED94 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 		2FEF7078CDB9C9A662E5B387 /* Pods-WeeBoo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeeBoo.release.xcconfig"; path = "Target Support Files/Pods-WeeBoo/Pods-WeeBoo.release.xcconfig"; sourceTree = "<group>"; };
 		316597592B8B053000F17D03 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		3165975C2B8C739000F17D03 /* GifView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifView.swift; sourceTree = "<group>"; };
+		3165975E2B8D9EDD00F17D03 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		31D13C192B8895AF00A0ED94 /* WeeBoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeeBoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31D13C1C2B8895AF00A0ED94 /* WeeBooApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeBooApp.swift; sourceTree = "<group>"; };
 		31D13C1E2B8895AF00A0ED94 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				3165975C2B8C739000F17D03 /* GifView.swift */,
+				3165975E2B8D9EDD00F17D03 /* TagView.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				31D13C1F2B8895AF00A0ED94 /* ContentView.swift in Sources */,
 				31D13C1D2B8895AF00A0ED94 /* WeeBooApp.swift in Sources */,
 				31D13C362B8AE8CC00A0ED94 /* BaseMVVMViewModel.swift in Sources */,
+				3165975F2B8D9EDD00F17D03 /* TagView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

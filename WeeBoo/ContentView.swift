@@ -24,48 +24,60 @@ struct ContentView: View {
     @State private var isAlertSuccess   = false
     
     var body: some View {
+        let state = viewModel.state.value
         ZStack {
             Color.white.ignoresSafeArea()
             
             VStack {
-                if viewModel.isGif,
-                   let gifUrl = URL(string: viewModel.state.value.urlString) {
-                       GIFView(gifURL: gifUrl)
-                        .padding(.horizontal)
-                        .scaledToFit()
-                        .frame(minWidth: 200, maxWidth: 400)
-                        .cornerRadius(10)
-                        .shadow(radius: 10)
-                    
-                    HStack {
-                        Text("Movie Name:")
-                        Text("\(viewModel.state.value.movieName)")
-                            .bold()
-                    }
-                    .padding()
-                } else {
-                    AsyncImage(url: URL(string: viewModel.state.value.urlString)) { phase in
-                        switch phase {
-                        case .empty:
-                            ProgressView()
-                        case let .success(image):
-                            image
-                                .resizable()
-                                .cornerRadius(10)
-                                .shadow(radius: 10)
-                        case .failure:
-                            Image(systemName: "photo")
-                        @unknown default:
-                            Image(systemName: "photo")
+                if let animeModel = state.animeModel {
+                    if viewModel.isGif,
+                       let gifUrl = URL(string: animeModel.url) {
+                        GIFView(gifURL: gifUrl)
+                            .padding(.horizontal)
+                            .scaledToFit()
+                            .frame(minWidth: 200, maxWidth: 400)
+                            .cornerRadius(10)
+                            .shadow(radius: 10)
+                        
+                        HStack {
+                            Text("Movie Name:")
+                            Text("\(animeModel.animeName ?? "")")
+                                .bold()
                         }
-                    }
-                    .scaledToFit()
-                    .frame(width: 300, height: 300)
+                        .padding()
+                    } else {
+                        AsyncImage(url: URL(string: animeModel.url)) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                            case let .success(image):
+                                image
+                                    .resizable()
+                                    .cornerRadius(10)
+                                    .shadow(radius: 10)
+                            case .failure:
+                                Image(systemName: "photo")
+                            @unknown default:
+                                Image(systemName: "photo")
+                            }
+                        }
+                        .scaledToFit()
+                        .frame(width: 300, height: 300)
+                        
+                        HStack {
+                            Text("Artist Name:")
+                            Text("\(animeModel.artistName ?? "")")
+                                .bold()
+                        }
+                        .padding()
+                    }   
                 }
                 
                 Spacer()
                 
-                ButtonView(viewModel: viewModel, itemsToShare: [viewModel.state.value.urlString])
+                TagView(viewModel: viewModel)
+                
+                ButtonView(viewModel: viewModel, itemsToShare: [state.animeModel?.url ?? ""])
             }
             
             if showAlert, !timerManager.timerFinished {
@@ -94,7 +106,7 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            viewModel.action.accept(.fetchAnimeImage)
+            viewModel.action.accept(.fetchAnimeImage(tag: state.currentTag))
             bindViewModel()
         }
         .alert(isPresented: $viewModel.isShowAppSettings) { 
@@ -137,7 +149,7 @@ struct ButtonView: View {
     var body: some View {
         HStack {
             Button("Other") {
-                viewModel.action.accept(.fetchAnimeImage)
+                viewModel.action.accept(.fetchAnimeImage(tag: viewModel.state.value.currentTag))
             }
             .padding()
             .background(Color.blue)
@@ -194,11 +206,11 @@ struct CustomAlerView: View {
 class TimerManager: ObservableObject {
     @Published var timerFinished = false
     private var timer: AnyCancellable?
-
+    
     func startTimer() {
         timerFinished = false
         var timeRemaining = 2
-
+        
         timer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
