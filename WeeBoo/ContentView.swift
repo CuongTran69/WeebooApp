@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-import RxSwift
-import Combine
-import UIKit
 
 struct ContentView: View {
     @StateObject var viewModel          = AnimeViewModel()
@@ -73,8 +70,6 @@ struct ContentView: View {
                     
                     TagView()
                     
-                    Spacer()
-                    
                     BottomView()
                 }
             }
@@ -124,25 +119,3 @@ struct ContentView: View {
 //        ContentView()
 //    }
 //}
-
-class TimerManager: ObservableObject {
-    @Published var timerFinished = false
-    private var timer: AnyCancellable?
-    
-    func startTimer() {
-        timerFinished = false
-        var timeRemaining = 2
-        
-        timer = Timer.publish(every: 1, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                if timeRemaining > 0 {
-                    timeRemaining -= 1
-                } else {
-                    self.timerFinished = true
-                    self.timer?.cancel()
-                }
-            }
-    }
-}

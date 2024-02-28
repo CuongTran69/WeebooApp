@@ -16,13 +16,15 @@ import Then
 class AnimeViewModel: ObservableObject {
     let animeService    = AnimeService()
     let disposeBag      = DisposeBag()
+    var tagActive       = TagAnimeGif.baka.rawValue
     
-    @Published var isLoading              = false
+    @Published var isLoading            = false
     @Published var animeModel           : AnimeModel?
     @Published var isGifActive          = false
     @Published var listTagActive        = [String]()
-    var tagActive                       = TagAnimeImage.neko.rawValue
     @Published var showAlert            : (Bool, String) = (false, "")
+    
+    @Published var shareSheetPresent    = false
     @Published var isShowAppSettings    = false
     
     func fetchAnimeImage() {
@@ -39,6 +41,7 @@ class AnimeViewModel: ObservableObject {
                 let anime = animeModels.first
             else { return }
             self.animeModel = anime
+            self.setActiveTag(isGif: anime.isGif())
         }
         .catch { [weak self] error in
             guard let self = self else { return }

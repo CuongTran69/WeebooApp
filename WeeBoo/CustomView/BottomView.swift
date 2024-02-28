@@ -10,8 +10,6 @@ import SwiftUI
 
 struct BottomView: View {
     @EnvironmentObject var viewModel: AnimeViewModel
-    // State share
-    @State private var shareSheetPresent    = false
     
     var body: some View {
         HStack {
@@ -32,14 +30,14 @@ struct BottomView: View {
             .cornerRadius(10)
             
             Button("Share") {
-                shareSheetPresent = true
+                viewModel.shareSheetPresent = true
             }
             .padding()
             .background(.mint)
             .foregroundColor(.white)
             .cornerRadius(10)
         }
-        .sheet(isPresented: $shareSheetPresent) { 
+        .sheet(isPresented: $viewModel.shareSheetPresent) { 
             ShareSheet(items: [viewModel.animeModel?.url ?? ""])
         }
     }
