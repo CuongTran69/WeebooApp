@@ -81,7 +81,9 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    TagView(viewModel: viewModel)
+                    TagView(viewModel: viewModel, isReload: isGifActive)
+                    
+                    Spacer()
                     
                     BottomView(viewModel: viewModel, itemsToShare: [state.animeModel?.url ?? ""])
                 }

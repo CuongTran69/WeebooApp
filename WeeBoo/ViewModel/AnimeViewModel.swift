@@ -139,6 +139,7 @@ extension AnimeViewModel {
         case let .setActiveTag(isTagGif):
             return previousState.with {
                 $0.isGifActive = isTagGif
+                $0.listTagActive = isTagGif ? TagAnimeGif.allCases.compactMap { $0.rawValue } : TagAnimeImage.allCases.compactMap { $0.rawValue }
             }
         }
     }
@@ -149,8 +150,6 @@ extension AnimeViewModel {
         var isLoading               = false
         var isGifActive             = false
         var listTagActive           = [String]()
-        var listTagAnimeImage       = TagAnimeImage.allCases
-        var listTagAnimeGif         = TagAnimeGif.allCases
         var currentTag              = TagAnimeImage.neko.rawValue
         var animeModel              : AnimeModel?
     }

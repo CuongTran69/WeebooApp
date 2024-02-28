@@ -12,17 +12,18 @@ public let flowLayoutDefaultItemSpacing: CGFloat = 4
 
 struct TagView: View {
     let viewModel: AnimeViewModel
+    @State var isReload: Bool
     
     var body: some View {
-        let datas = viewModel.state.value.listTagAnimeGif
+        let datas = viewModel.state.value.listTagActive
         
-        FlowLayout(mode: .scrollable, items: datas) { data in
-            Text(data.rawValue)
+        FlowLayout(mode: .scrollable, items: isReload ? datas : datas) { tag in
+            Text(tag)
                 .padding(5)
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(5)
                 .onTapGesture {
-                    viewModel.action.accept(.fetchAnimeImage(tag: data.rawValue))
+                    viewModel.action.accept(.fetchAnimeImage(tag: tag))
                 }
         }
         .padding()
