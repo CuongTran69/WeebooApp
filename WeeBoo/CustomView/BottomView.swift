@@ -9,15 +9,14 @@ import Foundation
 import SwiftUI
 
 struct BottomView: View {
-    var viewModel: AnimeViewModel
+    @EnvironmentObject var viewModel: AnimeViewModel
     // State share
     @State private var shareSheetPresent    = false
-    var itemsToShare                        : [Any]
     
     var body: some View {
         HStack {
             Button("Other") {
-                viewModel.action.accept(.fetchAnimeImage(tag: viewModel.state.value.currentTag))
+                viewModel.fetchAnimeImage()
             }
             .padding()
             .background(Color.blue)
@@ -25,7 +24,7 @@ struct BottomView: View {
             .cornerRadius(10)
             
             Button("Save") {
-                viewModel.action.accept(.downloadAndSaveImage)
+                viewModel.downloadAndSaveImage()
             }
             .padding()
             .background(Color.green)
@@ -41,7 +40,7 @@ struct BottomView: View {
             .cornerRadius(10)
         }
         .sheet(isPresented: $shareSheetPresent) { 
-            ShareSheet(items: itemsToShare)
+            ShareSheet(items: [viewModel.animeModel?.url ?? ""])
         }
     }
 }

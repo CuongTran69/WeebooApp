@@ -9,46 +9,45 @@ import Foundation
 import SwiftUI
 
 struct HeaderView: View {
-    let viewModel   : AnimeViewModel
-    let isGifActive : Bool
+    @EnvironmentObject var viewModel   : AnimeViewModel
     
     var body: some View {
         HStack(spacing: 3) {
             Text("Image")
                 .padding(5)
-                .background(isGifActive ? Color.white : Color.black)
-                .foregroundColor(isGifActive ? .black : .white)
+                .background(viewModel.isGifActive ? Color.white : Color.black)
+                .foregroundColor(viewModel.isGifActive ? .black : .white)
                 .cornerRadius(5)
                 .clipShape(RoundedRectangle(cornerRadius: 5))
                 .overlay(
                     RoundedRectangle(cornerRadius: 5)
-                        .stroke(isGifActive ? Color.black : Color.white, lineWidth: 1)
+                        .stroke(viewModel.isGifActive ? Color.black : Color.white, lineWidth: 1)
                 )
                 .onTapGesture {
                     withAnimation(.easeInOut(duration: 0.5)) {
-                        self.viewModel.action.accept(.activeTag(isTagGif: false))
+                        self.viewModel.setActiveTag(isGif: false)
                     }
                 }
                 .transition(.scale)
             
             Text("Gif")
                 .padding(5)
-                .background(isGifActive ? Color.black : Color.white)
-                .foregroundColor(isGifActive ? .white : .black)
+                .background(viewModel.isGifActive ? Color.black : Color.white)
+                .foregroundColor(viewModel.isGifActive ? .white : .black)
                 .cornerRadius(5)
                 .clipShape(RoundedRectangle(cornerRadius: 5))
                 .overlay(
                     RoundedRectangle(cornerRadius: 5)
-                        .stroke(isGifActive ? Color.white : Color.black, lineWidth: 1)
+                        .stroke(viewModel.isGifActive ? Color.white : Color.black, lineWidth: 1)
                 )
                 .onTapGesture {
                     withAnimation(.easeInOut(duration: 0.5)) {
-                        self.viewModel.action.accept(.activeTag(isTagGif: true))
+                        self.viewModel.setActiveTag(isGif: true)
                     }
                 }
                 .transition(.scale)
         }
-        .animation(.easeInOut, value: isGifActive)
+        .animation(.easeInOut, value: viewModel.isGifActive)
         .padding(.bottom)
     }
 }

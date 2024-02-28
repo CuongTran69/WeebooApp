@@ -11,19 +11,18 @@ import SwiftUI
 public let flowLayoutDefaultItemSpacing: CGFloat = 4
 
 struct TagView: View {
-    let viewModel: AnimeViewModel
-    @State var isReload: Bool
+    @EnvironmentObject var viewModel: AnimeViewModel
     
     var body: some View {
-        let datas = viewModel.state.value.listTagActive
+        let datas = viewModel.listTagActive
         
-        FlowLayout(mode: .scrollable, items: isReload ? datas : datas) { tag in
+        FlowLayout(mode: .scrollable, items: viewModel.isGifActive ? datas : datas) { tag in
             Text(tag)
                 .padding(5)
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(5)
                 .onTapGesture {
-                    viewModel.action.accept(.fetchAnimeImage(tag: tag))
+                    viewModel.onTapTag(tag: tag)
                 }
         }
         .padding()

@@ -11,32 +11,22 @@ import Combine
 import UIKit
 
 struct ContentView: View {
-    @ObservedObject var viewModel       = AnimeViewModel()
+    @StateObject var viewModel          = AnimeViewModel()
     @ObservedObject var timerManager    = TimerManager()
     
-    // State loading
-    @State private var isLoading        = false
-    
-    // State alert view
-    @State private var showAlert        = false
-    @State private var messageAlert     = ""
-    @State private var isAlertSuccess   = false
-    
-    @State private var isGifActive      = false
     
     var body: some View {
-        let state = viewModel.state.value
         ZStack {
             Color.white.ignoresSafeArea()
             
             ScrollView {
                 VStack {
-                    HeaderView(viewModel: viewModel, isGifActive: isGifActive)
+                    HeaderView()
                     
                     Spacer()
                     
-                    if let animeModel = state.animeModel {
-                        if viewModel.isGif,
+                    if let animeModel = viewModel.animeModel {
+                        if animeModel.isGif(),
                            let gifUrl = URL(string: animeModel.url) {
                             GIFView(gifURL: gifUrl)
                                 .scaledToFit()
@@ -81,28 +71,28 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    TagView(viewModel: viewModel, isReload: isGifActive)
+                    TagView()
                     
                     Spacer()
                     
-                    BottomView(viewModel: viewModel, itemsToShare: [state.animeModel?.url ?? ""])
+                    BottomView()
                 }
             }
             
-            if showAlert, !timerManager.timerFinished {
+            if viewModel.showAlert.0, !timerManager.timerFinished {
                 ZStack {
                     Color.black
                         .ignoresSafeArea()
                         .opacity(0.3)
                     
-                    AlertView(isSuccess: isAlertSuccess, messageAlert: messageAlert)
+                    AlertView(isSuccess: viewModel.showAlert.0, messageAlert: viewModel.showAlert.1)
                         .onAppear {
                             timerManager.startTimer()
                         }
                 }
             }
             
-            if isLoading {
+            if viewModel.isLoading {
                 ZStack {
                     Color.black
                         .opacity(0.3)
@@ -115,42 +105,17 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            viewModel.action.accept(.fetchAnimeImage(tag: state.currentTag))
-            bindViewModel()
+            viewModel.fetchAnimeImage()
         }
         .alert(isPresented: $viewModel.isShowAppSettings) { 
             Alert(title: Text("Permission Denied"),
                   message: Text("Please enable access to your photos in the Settings app."),
-                  primaryButton: .default(Text("Open settings"), action: { 
-                viewModel.openAppSettings()
+                  primaryButton: .default(Text("Open settings"), action: { [self] in
+                self.viewModel.openAppSettings()
             }),
                   secondaryButton: .cancel())
         }
-    }
-    
-    func bindViewModel() {
-        viewModel.navigator
-            .subscribe(onNext: { [self] navigator in
-                switch navigator {
-                case let .showAlert(isSuccess, message):
-                    self.showAlert = true
-                    self.messageAlert = message
-                    self.isAlertSuccess = isSuccess
-                }
-            })
-            .disposed(by: viewModel.disposeBag)
-        
-        viewModel.state.compactMap { $0.isLoading }
-            .subscribe(onNext: { [self] loading in
-                self.isLoading = loading
-            })
-            .disposed(by: viewModel.disposeBag)
-        
-        viewModel.state.compactMap { $0.isGifActive }
-            .subscribe(onNext: { [self] isGifActive in
-                self.isGifActive = isGifActive
-            })
-            .disposed(by: viewModel.disposeBag)
+        .environmentObject(viewModel)
     }
 }
 
