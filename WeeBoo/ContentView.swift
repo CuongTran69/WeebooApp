@@ -14,7 +14,8 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
+            Color("Background")
+                .ignoresSafeArea()
             
             ScrollView {
                 VStack {
@@ -66,8 +67,8 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}

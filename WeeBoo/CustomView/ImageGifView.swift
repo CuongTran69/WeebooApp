@@ -26,6 +26,14 @@ struct ImageGifView: View {
                     Text("Movie Name:")
                     Text("\(animeModel.animeName ?? "")")
                         .bold()
+                    
+                    if let animeName = animeModel.animeName, let link = URL(string: "https://www.google.com/search?q=\(animeName)") {
+                        Link(destination: link) { 
+                            Image(systemName: "link")
+                                .foregroundColor(.black)
+                                .imageScale(.medium)
+                        }
+                    }
                 }
                 .padding()
             } else {
@@ -52,7 +60,7 @@ struct ImageGifView: View {
                     Text("\(animeModel.artistName ?? "")")
                         .bold()
                     
-                    if let link = URL(string: "https://www.google.com/search?q=\(animeModel.artistName ?? "")") {
+                    if let artistName = animeModel.artistName, let link = URL(string: "https://www.google.com/search?q=\(artistName)") {
                         Link(destination: link) { 
                             Image(systemName: "link")
                                 .foregroundColor(.black)

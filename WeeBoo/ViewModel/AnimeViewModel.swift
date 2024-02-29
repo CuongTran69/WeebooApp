@@ -12,11 +12,13 @@ import Photos
 import RxSwift
 import RxCocoa
 import Then
+import SwiftUI
 
 class AnimeViewModel: ObservableObject {
     let animeService    = AnimeService()
     let disposeBag      = DisposeBag()
     var tagActive       = TagAnimeImage.husbando.rawValue
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @Published var isLoading            = false
     @Published var animeModel           : AnimeModel?
@@ -26,6 +28,10 @@ class AnimeViewModel: ObservableObject {
     
     @Published var shareSheetPresent    = false
     @Published var isShowAppSettings    = false
+    
+    func colorSchemeDark() -> Bool {
+        colorScheme == .dark
+    }
     
     func fetchAnimeImage() {
         isLoading = true
