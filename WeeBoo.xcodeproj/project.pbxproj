@@ -12,8 +12,10 @@
 		3165975F2B8D9EDD00F17D03 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3165975E2B8D9EDD00F17D03 /* TagView.swift */; };
 		316597612B8DE7E300F17D03 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316597602B8DE7E300F17D03 /* AlertView.swift */; };
 		316597632B8DE89F00F17D03 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316597622B8DE89F00F17D03 /* HeaderView.swift */; };
-		316597652B8DE95E00F17D03 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316597642B8DE95E00F17D03 /* BottomView.swift */; };
+		316597652B8DE95E00F17D03 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316597642B8DE95E00F17D03 /* ButtonView.swift */; };
 		316597672B8DE9D300F17D03 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316597662B8DE9D300F17D03 /* LoadingView.swift */; };
+		316597692B8F7F1A00F17D03 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316597682B8F7F1A00F17D03 /* TestView.swift */; };
+		3165976B2B8F8EDA00F17D03 /* ImageGifView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3165976A2B8F8ED900F17D03 /* ImageGifView.swift */; };
 		31D13C1D2B8895AF00A0ED94 /* WeeBooApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C1C2B8895AF00A0ED94 /* WeeBooApp.swift */; };
 		31D13C1F2B8895AF00A0ED94 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D13C1E2B8895AF00A0ED94 /* ContentView.swift */; };
 		31D13C212B8895B000A0ED94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31D13C202B8895B000A0ED94 /* Assets.xcassets */; };
@@ -33,8 +35,10 @@
 		3165975E2B8D9EDD00F17D03 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		316597602B8DE7E300F17D03 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		316597622B8DE89F00F17D03 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
-		316597642B8DE95E00F17D03 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
+		316597642B8DE95E00F17D03 /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
 		316597662B8DE9D300F17D03 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		316597682B8F7F1A00F17D03 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		3165976A2B8F8ED900F17D03 /* ImageGifView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGifView.swift; sourceTree = "<group>"; };
 		31D13C192B8895AF00A0ED94 /* WeeBoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeeBoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31D13C1C2B8895AF00A0ED94 /* WeeBooApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeBooApp.swift; sourceTree = "<group>"; };
 		31D13C1E2B8895AF00A0ED94 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,8 +79,10 @@
 				3165975E2B8D9EDD00F17D03 /* TagView.swift */,
 				316597602B8DE7E300F17D03 /* AlertView.swift */,
 				316597622B8DE89F00F17D03 /* HeaderView.swift */,
-				316597642B8DE95E00F17D03 /* BottomView.swift */,
+				316597642B8DE95E00F17D03 /* ButtonView.swift */,
 				316597662B8DE9D300F17D03 /* LoadingView.swift */,
+				316597682B8F7F1A00F17D03 /* TestView.swift */,
+				3165976A2B8F8ED900F17D03 /* ImageGifView.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -288,12 +294,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				316597692B8F7F1A00F17D03 /* TestView.swift in Sources */,
 				3165975A2B8B053000F17D03 /* CustomError.swift in Sources */,
 				3165975D2B8C739000F17D03 /* GifView.swift in Sources */,
 				31D13C2B2B8897B200A0ED94 /* WeebooService.swift in Sources */,
-				316597652B8DE95E00F17D03 /* BottomView.swift in Sources */,
+				316597652B8DE95E00F17D03 /* ButtonView.swift in Sources */,
 				31D13C2E2B8A419300A0ED94 /* AnimeViewModel.swift in Sources */,
 				31D13C332B8A41F900A0ED94 /* AnimeModel.swift in Sources */,
+				3165976B2B8F8EDA00F17D03 /* ImageGifView.swift in Sources */,
 				316597612B8DE7E300F17D03 /* AlertView.swift in Sources */,
 				31D13C1F2B8895AF00A0ED94 /* ContentView.swift in Sources */,
 				316597632B8DE89F00F17D03 /* HeaderView.swift in Sources */,

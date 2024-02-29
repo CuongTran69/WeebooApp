@@ -19,60 +19,12 @@ struct ContentView: View {
             ScrollView {
                 VStack {
                     HeaderView()
-                    
-                    Spacer()
-                    
-                    if let animeModel = viewModel.animeModel {
-                        if animeModel.isGif(),
-                           let gifUrl = URL(string: animeModel.url) {
-                            GIFView(gifURL: gifUrl)
-                                .scaledToFit()
-                                .frame(minWidth: 200, maxWidth: 400)
-                                .cornerRadius(10)
-                                .shadow(radius: 10)
-                                .padding(.horizontal)
-                            
-                            HStack {
-                                Text("Movie Name:")
-                                Text("\(animeModel.animeName ?? "")")
-                                    .bold()
-                            }
-                            .padding()
-                        } else {
-                            AsyncImage(url: URL(string: animeModel.url)) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                case let .success(image):
-                                    image
-                                        .resizable()
-                                        .cornerRadius(10)
-                                        .shadow(radius: 10)
-                                case .failure:
-                                    Image(systemName: "photo")
-                                @unknown default:
-                                    Image(systemName: "photo")
-                                }
-                            }
-                            .scaledToFit()
-                            .frame(width: 300, height: 300)
-                            
-                            HStack {
-                                Text("Artist Name:")
-                                Text("\(animeModel.artistName ?? "")")
-                                    .bold()
-                            }
-                            .padding()
-                        }
-                    }
-                    
-                    Spacer()
-                    
+                    ImageGifView()
                     TagView()
-                    
-                    BottomView()
                 }
             }
+            
+            ButtonView()
             
             if viewModel.showAlert.0, !timerManager.timerFinished {
                 ZStack {
@@ -114,8 +66,8 @@ struct ContentView: View {
     }
 }
 
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}

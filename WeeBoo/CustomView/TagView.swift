@@ -16,16 +16,19 @@ struct TagView: View {
     var body: some View {
         let datas = viewModel.listTagActive
         
-        FlowLayout(mode: .scrollable, items: viewModel.isGifActive ? datas : datas) { tag in
+        FlowLayout(mode: .scrollable, items: datas) { tag in
             Text(tag)
                 .padding(5)
-                .background(Color.gray.opacity(0.2))
+                .background(tag == viewModel.tagActive ? .black : .gray.opacity(0.2))
+                .foregroundColor(tag == viewModel.tagActive ? .white : .black)
                 .cornerRadius(5)
                 .onTapGesture {
-                    viewModel.onTapTag(tag: tag)
+                    if tag != viewModel.tagActive {
+                        viewModel.onTapTag(tag: tag)
+                    }
                 }
         }
-        .padding()
+        .padding(.horizontal)
     }
 }
 

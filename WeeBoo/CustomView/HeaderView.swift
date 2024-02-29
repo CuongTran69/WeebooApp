@@ -25,7 +25,7 @@ struct HeaderView: View {
                 )
                 .onTapGesture {
                     withAnimation(.easeInOut(duration: 0.5)) {
-                        self.viewModel.setActiveTag(isGif: false)
+                        self.viewModel.setActiveTag(isGif: false, isFirstLoad: true)
                     }
                 }
                 .transition(.scale)
@@ -42,7 +42,7 @@ struct HeaderView: View {
                 )
                 .onTapGesture {
                     withAnimation(.easeInOut(duration: 0.5)) {
-                        self.viewModel.setActiveTag(isGif: true)
+                        self.viewModel.setActiveTag(isGif: true, isFirstLoad: true)
                     }
                 }
                 .transition(.scale)

@@ -16,7 +16,7 @@ import Then
 class AnimeViewModel: ObservableObject {
     let animeService    = AnimeService()
     let disposeBag      = DisposeBag()
-    var tagActive       = TagAnimeGif.baka.rawValue
+    var tagActive       = TagAnimeImage.husbando.rawValue
     
     @Published var isLoading            = false
     @Published var animeModel           : AnimeModel?
@@ -49,7 +49,19 @@ class AnimeViewModel: ObservableObject {
         }
     }
     
-    func setActiveTag(isGif: Bool) {
+    func setActiveTag(isGif: Bool, isFirstLoad: Bool = false) {
+        /*
+         isGif          : check tag đó có phải từ tag Gif
+         isFirstLoad    : check chuyển từ Gif <-> Image thì reload lại ảnh
+         */
+        if isFirstLoad {
+            if isGif {
+                tagActive = TagAnimeGif.allCases.first?.rawValue ?? ""
+            } else {
+                tagActive = TagAnimeImage.allCases.first?.rawValue ?? ""
+            }
+            fetchAnimeImage()
+        }
         isGifActive = isGif
         listTagActive = isGif ? TagAnimeGif.allCases.compactMap { $0.rawValue } : TagAnimeImage.allCases.compactMap { $0.rawValue }
     }
@@ -75,10 +87,9 @@ class AnimeViewModel: ObservableObject {
                 self?.isLoading = false
                 return
             }
-            
+            self.isLoading = false
             PHPhotoLibrary.requestAuthorization { [weak self] status in
                 guard let self = self else { return }
-                self.isLoading = false
                 
                 switch status {
                 case .authorized:
